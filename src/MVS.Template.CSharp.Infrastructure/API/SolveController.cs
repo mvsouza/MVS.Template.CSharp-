@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace MVS.Template.CSharp.Infrastructure.Controller
+namespace MVS.Template.CSharp.Infrastructure.API
 {
     [Produces("application/json")]
     [Route("api/v1/Solve")]
