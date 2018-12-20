@@ -3,16 +3,18 @@
 
 Github:
     First of all create a Github repository with your projects name and on setting get the project key.
-Sonarqube:
+Sonarcloud:
     On [setup manually](https://sonarcloud.io/projects/create) insert your account key and put the name of the project(MVS.Template.CSharp)
     Generate a token and save it for later
 Opencover:
     Create a new project using the github repository and save the generated token.
-Appvoyer:
-    Access appvoyer and add your project from github.
+Appveyor:
+    Access appveyor and add your project from github.
     Add the enviroment variables:
       "codecov_token" with the token genareted by codecov
-      "description" sonar_login with the token genareted on sonarcloud
+      "sonarcloud_login" with the token genareted on sonarcloud
+      "sonarcloud_org" with your cloud org name
+      "sonarcloud_key" with your project key
     Change the Build worker image to Visual Studio 2017
 Heroku:
     Create a new app
