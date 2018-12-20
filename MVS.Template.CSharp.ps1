@@ -1,12 +1,34 @@
 [CmdletBinding()]
 param(
     [parameter(Mandatory=$true, Position=1)]
-    [ValidateSet("openCover", "sonarqubeBuild", "statusSonarqube", "startSonarqube","stopSonarqube", "installDependencies")]
+    [ValidateSet("openCover", "sonarqubeBuild", "statusSonarqube", "startSonarqube","stopSonarqube", "installDependencies", "sonarCloudBuild")]
     [string]$action,
     [parameter(Mandatory=$false)]
     [switch]$all
 )
 process {
+    #Requires -Modules Set-PsEnv
+    Set-PsEnv
+
+    $tasks = @{};
+
+    $tasks.Add("sonarCloudBuild",@{
+        description="Runs build and Sonnar Scanner on SonarCloud.";
+        script = {
+            #Requires -Modules Set-PsEnv
+            SonarQube.Scanner.MSBuild.exe begin /k:"$env:sonarcloud_key" /d:sonar.organization="$env:sonarcloud_org" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="$env:sonarcloud_login" /d:sonar.cs.opencover.reportsPaths="OpenCover.xml";
+            dotnet msbuild;
+            OpenCover.Console.exe -register:user -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:"test --logger:trx;LogFileName=results.trx /p:DebugType=full test\MVS.Template.CSharp.UnitTest\MVS.Template.CSharp.UnitTest.csproj" -filter:"+[MVS.Template.CSharp*]* -[*.Test*]*" -oldStyle -output:"OpenCover.xml";
+            SonarQube.Scanner.MSBuild.exe end /d:sonar.login="$env:sonarcloud_login";
+            codecov -f .\OpenCover.xml -t $env:codecov_token;
+        }
+    });
+    
+    $task = $tasks.Get_Item($action)
+    if ($task) {
+        Invoke-Command $task.script
+    }
+
     function SonarqubeStatus($add){
         $status = Invoke-RestMethod "$add/api/system/status";
         return $status.status -eq "UP";

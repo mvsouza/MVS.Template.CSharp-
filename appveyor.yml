@@ -5,15 +5,14 @@ before_build:
 - choco install opencover.portable
 - choco install codecov
 - choco install msbuild-sonarqube-runner
+- ps: |
+        Invoke-WebRequest https://raw.githubusercontent.com/rajivharris/Set-PsEnv/master/Set-PsEnv.psm1 -OutFile "..\Set-PsEnv.psm1"
+        Import-Module '..\Set-PsEnv.psm1'
 build:
   project: MVS.Template.CSharp.sln
   verbosity: minimal
 test_script:
-  - SonarQube.Scanner.MSBuild.exe begin /k:"$(sonarcloud_key)" /d:sonar.organization="$(sonarcloud_org)" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="$(sonarcloud_login)" /d:sonar.cs.opencover.reportsPaths="OpenCover.xml"
-  - dotnet msbuild
-  - OpenCover.Console.exe -register:user -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:"test --logger:trx;LogFileName=results.trx /p:DebugType=full test\MVS.Template.CSharp.UnitTest\MVS.Template.CSharp.UnitTest.csproj" -filter:"+[MVS.Template.CSharp*]* -[*.Test*]*" -oldStyle -output:"OpenCover.xml"
-  - SonarQube.Scanner.MSBuild.exe end /d:sonar.login="$(sonarcloud_login)"
-  - codecov -f .\OpenCover.xml -t $(codecov_token)
+  - ps: .\MVS.Template.CSharp.ps1 sonarCloudBuild
  
 branches:
   only:

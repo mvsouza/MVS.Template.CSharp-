@@ -24,6 +24,10 @@ bld/
 [Oo]bj/
 [Ll]og/
 
+# dotenv deploy config
+
+.env
+
 # Visual Studio 2015 cache/options directory
 .vs/
 
