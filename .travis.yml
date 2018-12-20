@@ -1,0 +1,9 @@
+language: csharp
+mono: none
+dotnet: 2.1
+services:
+  - docker
+script:
+  - dotnet test ./test/MVS.Template.CSharp.UnitTest/MVS.Template.CSharp.UnitTest.csproj
+after_success:
+  - test "$TRAVIS_BRANCH" = "master" && sh scripts/deploy_heroku.sh

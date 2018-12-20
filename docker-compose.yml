@@ -1,0 +1,11 @@
+version: '3.4'
+
+version: '3.3'
+
+services: 
+    
+  MVS.Template.CSharp.API:
+    image: MVS.Template.CSharp.API:${TAG:-latest}
+    build:
+      context: .
+      dockerfile: src/MVS.Template.CSharp.Infrastructure/Dockerfile
