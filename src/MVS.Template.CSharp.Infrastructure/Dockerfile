@@ -1,4 +1,4 @@
-FROM microsoft/dotnet:2.1-runtime AS base
+FROM microsoft/dotnet:2.1-aspnetcore-runtime AS base
 WORKDIR /app
 EXPOSE ${PORT:-80}
 ENV PORT ${PORT:-80}

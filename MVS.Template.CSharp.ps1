@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [parameter(Mandatory=$true, Position=1)]
-    [ValidateSet("openCover", "sonarqubeLocalBuild", "statusSonarqube", "startSonarqubeContainer","stopSonarqubeContainer", "installDependencies", "sonarCloudBuild")]
+    [ValidateSet("openCover", "sonarqubeLocalBuild", "statusSonarqube", "startSonarqubeContainer","stopSonarqubeContainer", "installDependencies", "sonarCloudBuild","deploy")]
     [string]$action,
     [parameter(Mandatory=$false)]
     [switch]$all
@@ -97,6 +97,15 @@ process {
             RunOpenCover $projectName $outputDir $opencoverFile;
             reportgenerator -reports:"$opencoverFile" -targetdir:"$outputDir";
             & "$outputDir\Index.htm";
+        }
+    });
+    $tasks.Add("deploy",@{
+        description="";
+        script = {
+            docker-compose build --force-rm;
+            docker login --username=_ --password=$env:api_key registry.heroku.com;
+            docker tag $env:heroku_name registry.heroku.com/$env:heroku_name/web;
+            docker push registry.heroku.com/$env:heroku_name/web;
         }
     });
     $task = $tasks.Get_Item($action)
