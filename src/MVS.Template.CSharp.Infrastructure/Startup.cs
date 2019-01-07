@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MVS.Template.CSharp.Application.Command;
+
 namespace MVS.Template.CSharp.Infrastructure
 {
     public class Startup
@@ -32,7 +34,7 @@ namespace MVS.Template.CSharp.Infrastructure
                 });
             });
             services.AddMvc();
-            services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
+            services.AddMediatR(typeof(SolveCalculusCommand).GetTypeInfo().Assembly);
 
         }
 

@@ -1,9 +1,6 @@
 ﻿using LightBDD.Framework;
 using LightBDD.Framework.Scenarios.Extended;
 using LightBDD.XUnit2;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace MVS.Template.CSharp.FunctionalTest.Features
 {

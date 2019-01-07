@@ -13,6 +13,9 @@ RUN dotnet build --no-restore -c Release -o /app
 FROM build AS publish
 RUN dotnet publish --no-restore -c Release -o /app
 
+FROM build AS testrunner
+RUN dotnet test test/MVS.Template.CSharp.UnitTest/MVS.Template.CSharp.UnitTest.csproj
+RUN dotnet test test/MVS.Template.CSharp.FunctionalTest/MVS.Template.CSharp.FunctionalTest.csproj
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .

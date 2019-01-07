@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2019
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MVS.Template.CSharp.UnitTest", "test\MVS.Template.CSharp.UnitTest\MVS.Template.CSharp.UnitTest.csproj", "{230097D9-2A46-4A0A-A937-72C2CA419E2C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MVS.Template.CSharp.FunctionalTest", "test\MVS.Template.CSharp.FunctionalTest.cs\MVS.Template.CSharp.FunctionalTest.csproj", "{AF4EAA70-1350-4935-A171-BF77BD07FF1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MVS.Template.CSharp.FunctionalTest", "test\MVS.Template.CSharp.FunctionalTest\MVS.Template.CSharp.FunctionalTest.csproj", "{AF4EAA70-1350-4935-A171-BF77BD07FF1D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{EA5022A2-3EDB-4B75-B1E7-BB53FFBA527A}"
 EndProject
