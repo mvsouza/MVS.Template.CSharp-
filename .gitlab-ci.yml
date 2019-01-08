@@ -1,14 +1,11 @@
-image: docker
-
-services:
-  - docker:dind
-
 before_script:
-  - apk add --no-cache py-pip
-  - pip install docker-compose
-  - docker-compose build
+  - apt-get update
+  - apt-get -y install docker.io
+
 
 build:
   stage: build
   script:
-    - docker-compose build
+    - docker build ./src/MVS.Template.CSharp.Infrastructure -t ${docker_image_name}:${TAG:-latest}
+  tags:
+    - linux

@@ -3,7 +3,7 @@ version: '3.3'
 services: 
     
   MVS.Template.CSharp.API:
-    image: ${heroku_name}:${TAG:-latest}
+    image: ${docker_image_name}:${TAG:-latest}
     build:
       context: .
       dockerfile: src/MVS.Template.CSharp.Infrastructure/Dockerfile

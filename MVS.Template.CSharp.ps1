@@ -104,8 +104,8 @@ process {
         script = {
             docker-compose build --force-rm;
             docker login --username=_ --password=$env:api_key registry.heroku.com;
-            docker tag $env:heroku_name registry.heroku.com/$env:heroku_name/web;
-            docker push registry.heroku.com/$env:heroku_name/web;
+            docker tag $env:docker_image_name registry.heroku.com/$env:docker_image_name/web;
+            docker push registry.heroku.com/$env:docker_image_name/web;
         }
     });
     $task = $tasks.Get_Item($action)
