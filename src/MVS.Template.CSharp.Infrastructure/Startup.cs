@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MVS.Template.CSharp.Application.Behavior;
 using MVS.Template.CSharp.Application.Command;
 using MVS.Template.CSharp.Application.Validation;
+using MVS.Template.CSharp.Infrastructure.Behaviors;
 
 namespace MVS.Template.CSharp.Infrastructure
 {
@@ -39,6 +40,7 @@ namespace MVS.Template.CSharp.Infrastructure
             services.AddMvc();
             services.AddMediatR(Assembly.LoadFrom("MVS.Template.CSharp.Application.dll"));
 
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
             services.AddTransient(typeof(IValidator<SolveCalculusCommand>), typeof(SolveCalculusCommandValidation));
         }
