@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Reflection;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MVS.Template.CSharp.Application.Behavior;
 using MVS.Template.CSharp.Application.Command;
+using MVS.Template.CSharp.Application.Validation;
 
 namespace MVS.Template.CSharp.Infrastructure
 {
@@ -34,8 +37,10 @@ namespace MVS.Template.CSharp.Infrastructure
                 });
             });
             services.AddMvc();
-            services.AddMediatR(typeof(SolveCalculusCommand).GetTypeInfo().Assembly);
+            services.AddMediatR(Assembly.LoadFrom("MVS.Template.CSharp.Application.dll"));
 
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
+            services.AddTransient(typeof(IValidator<SolveCalculusCommand>), typeof(SolveCalculusCommandValidation));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
