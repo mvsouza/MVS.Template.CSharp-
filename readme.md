@@ -1,27 +1,48 @@
 
 # MVS.Template.CSharp Project
 
-Github:
-    First of all create a Github repository with your projects name and on setting get the project key.
-Sonarcloud:
-    On [setup manually](https://sonarcloud.io/projects/create) insert your account key and put the name of the project(MVS.Template.CSharp)
-    Generate a token and save it for later
-Opencover:
-    Create a new project using the github repository and save the generated token.
-Appveyor:
-    Access appveyor and add your project from github.
-    Add the enviroment variables:
-      "codecov_token" with the token genareted by codecov
-      "sonarcloud_login" with the token genareted on sonarcloud
-      "sonarcloud_org" with your cloud org name
-      "sonarcloud_key" with your project key
-    Change the Build worker image to Visual Studio 2017
-Heroku:
-    Create a new app
-    Get your heroku api-key on your profile
-    If your app has a diferent name from your projet(MVS.Template.CSharp), chage the heroku script inside the folder scripts.
-Travis:
-    Turn travis-ci up for the repository
-    Set the variable for heroku
-      "api_key" with the heroku apikey
-Travis: 
+It's boilerplate that provides a rich technologie stack, that set your project up and running.
+
+
+## Package manager
+
+<img src="docs/images/chocolatey.png" align="left" height="64px"/> 
+<img src="docs/images/nuget.png" height="64px"/> 
+
+## Architechture and desing
+
+<img src="docs/images/aspnet-core.png" align="left" height="64px"/> 
+<img src="docs/images/mediatr.png" align="left" height="64px"/> 
+<img src="docs/images/fluent-validation.png" height="50px"/> 
+
+
+## Documantation
+
+<img src="docs/images/plantuml.png" align="left" height="64px"/> 
+<img src="docs/images/markdown.png" align="left" height="64px"/> 
+<img src="docs/images/swagger.png" height="64px"/> 
+
+
+## Testing
+
+<img src="docs/images/xunit.png" align="left" height="64px"/> 
+<img src="docs/images/lightbdd.png" align="left" height="64px"/> 
+<img src="docs/images/moq.png" align="left" height="64px"/> 
+<img src="docs/images/opencover.png" height="64px"/> 
+
+## Build 
+
+<img src="docs/images/.env.png" align="left" height="64px"/> 
+<img src="docs/images/docker.png" align="left" height="64px"/> 
+<img src="docs/images/docker-compose.png" height="64px"/> 
+
+## CI
+
+<img src="docs/images/appveyor.png" align="left" height="64px"/> 
+<img src="docs/images/travis-ci.png" align="left" height="64px"/> 
+<img src="docs/images/heroku.png" height="64px"/> 
+
+## Quality gate
+
+<img src="docs/images/sonar-logo.png" height="64px"/> 
+
