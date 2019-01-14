@@ -38,7 +38,7 @@ namespace MVS.Template.CSharp.Infrastructure
                 });
             });
             services.AddMvc();
-            services.AddMediatR(Assembly.LoadFrom("MVS.Template.CSharp.Application.dll"));
+            services.AddMediatR(Assembly.Load("MVS.Template.CSharp.Application.dll"));
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
