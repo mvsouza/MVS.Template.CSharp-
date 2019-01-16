@@ -1,7 +1,9 @@
 [CmdletBinding()]
 param(
     [parameter(Mandatory=$true, Position=1)]
-    [ValidateSet("openCover", "sonarqubeLocalBuild", "statusSonarqube", "startSonarqubeContainer","stopSonarqubeContainer", "installDependencies", "sonarCloudBuild","deploy")]
+    [ValidateSet("openCover", 
+                 "sonarqubeLocalBuild", "statusSonarqube", "startSonarqubeContainer","stopSonarqubeContainer", "sonarCloudBuild",
+                 "installDependencies","deploy", "plantumlSVG")]
     [string]$action,
     [parameter(Mandatory=$false)]
     [switch]$all
@@ -25,6 +27,12 @@ process {
 
     $tasks = @{};
 
+    $tasks.Add("plantumlSVG", @{
+        description="Convert all platuml files to SVG.";
+        script = {
+            ls *.puml -Recurse | %{ plantuml $_.FullName -tsvg } ;
+        };
+    });
     $tasks.Add("sonarCloudBuild",@{
         description="Runs build and Sonnar Scanner on SonarCloud.";
         script = {
@@ -52,7 +60,7 @@ process {
         description="";
         script = {
             if(Get-Command choco -errorAction SilentlyContinue){
-                choco install -y reportgenerator.portable OpenCover msbuild-sonarqube-runner docker-for-windows;
+                choco install -y reportgenerator.portable OpenCover msbuild-sonarqube-runner docker-for-windows plantuml;
             } 
             else{
                 Write-Output "Install chocolatey first using: Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))";
