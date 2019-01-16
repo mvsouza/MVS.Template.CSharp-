@@ -1,0 +1,13 @@
+@startuml
+skinparam Handwritten true
+skinparam monochrome true	
+skinparam packageStyle rect	
+skinparam shadowing false
+node "Infrastructure + UI" as inf
+node Application
+node Domain
+
+inf -down-> Application
+Application -down-> Domain
+inf -> Domain
+@enduml
