@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MVS.Template.CSharp.Application.Behavior;
 using MVS.Template.CSharp.Application.Command;
 using MVS.Template.CSharp.Application.Validation;
@@ -25,6 +26,7 @@ namespace MVS.Template.CSharp.Infrastructure
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHealthChecks();
             services.AddOptions();
             services.AddSwaggerGen(options =>
             {
@@ -38,7 +40,7 @@ namespace MVS.Template.CSharp.Infrastructure
                 });
             });
             services.AddMvc();
-            services.AddMediatR(Assembly.Load("MVS.Template.CSharp.Application.dll"));
+            services.AddMediatR(Assembly.LoadFrom("MVS.Template.CSharp.Application.dll"));
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
@@ -53,6 +55,7 @@ namespace MVS.Template.CSharp.Infrastructure
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseHealthChecks("/health");
             app.UseMvc();
             app.UseSwagger()
                .UseSwaggerUI(c =>
