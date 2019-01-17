@@ -22,7 +22,6 @@ process {
         $opencoverFilter = "+[$projectName*]* -[*UnitTest]*";
         $target = "test --logger:trx;LogFileName=$outputDir\results.trx $($unitTestProj.FullName)";
         OpenCover.Console.exe -register:user -target:"$dotnet" -targetargs:"$target" -filter:"$opencoverFilter" -oldStyle -output:"$opencoverFile";
-
     }
 
     $tasks = @{};
@@ -60,7 +59,7 @@ process {
         description="";
         script = {
             if(Get-Command choco -errorAction SilentlyContinue){
-                choco install -y reportgenerator.portable OpenCover msbuild-sonarqube-runner docker-for-windows plantuml;
+                choco install -y dotnetcore-sdk reportgenerator.portable OpenCover msbuild-sonarqube-runner docker-for-windows plantuml;
             } 
             else{
                 Write-Output "Install chocolatey first using: Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))";
