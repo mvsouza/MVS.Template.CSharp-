@@ -1,0 +1,9 @@
+---
+applications:
+-   name: MVS.Template.CSharp
+    instances: 1
+    memory: 512M
+    disk_quota: 512M
+    buildpack: dotnet_core_buildpack_222
+    health-check-type: http
+    health-check-http-endpoint: /health 

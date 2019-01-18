@@ -3,7 +3,9 @@ param(
     [parameter(Mandatory=$true, Position=1)]
     [ValidateSet("openCover", 
                  "sonarqubeLocalBuild", "statusSonarqube", "startSonarqubeContainer","stopSonarqubeContainer", "sonarCloudBuild",
-                 "installDependencies","deploy", "plantumlSVG")]
+                 "installDependencies", 
+                 "plantumlSVG",
+                 "herokuPush","cfPush")]
     [string]$action,
     [parameter(Mandatory=$false)]
     [switch]$all
@@ -32,6 +34,18 @@ process {
             ls *.puml -Recurse | %{ plantuml $_.FullName -tsvg } ;
         };
     });
+    
+    $tasks.Add("cfPush", @{
+        description="Push it to the PCF.";
+        script = {
+            cd src\MVS.Template.CSharp.Infrastructure;
+            dotnet publish -c Release -o .\app;
+            cd app;
+            cf push -f '..\manifest.yml'
+            cd ..\..\..
+        };
+    });
+
     $tasks.Add("sonarCloudBuild",@{
         description="Runs build and Sonnar Scanner on SonarCloud.";
         script = {
@@ -106,7 +120,7 @@ process {
             & "$outputDir\Index.htm";
         }
     });
-    $tasks.Add("deploy",@{
+    $tasks.Add("herokuPush",@{
         description="";
         script = {
             docker-compose build --force-rm;

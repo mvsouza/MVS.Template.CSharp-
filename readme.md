@@ -39,7 +39,11 @@ It's boilerplate that provides a rich technologie stack, that set your project u
 
 ### CI
 
-<img src="docs/images/appveyor.png" height="32px"/>  <img src="docs/images/travis-ci.png" height="32px"/>  <img src="docs/images/heroku.png" height="32px"/> 
+<img src="docs/images/appveyor.png" height="32px"/>  <img src="docs/images/travis-ci.png" height="32px"/>  
+
+### Deploy
+
+<img src="docs/images/heroku.png" height="32px"/>  <img src="docs/images/cf.png" height="32px"/> 
 
 ### Quality gate
 
