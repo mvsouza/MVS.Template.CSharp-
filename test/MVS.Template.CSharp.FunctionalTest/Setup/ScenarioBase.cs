@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.TestHost;
 
 namespace MVS.Template.CSharp.FunctionalTest.Setup
 {
-    public class MathSolverScenarioBase
+    public class ScenarioBase
     {
         private const string ApiUrlBase = "api/v1/Solve";
 
@@ -16,6 +16,10 @@ namespace MVS.Template.CSharp.FunctionalTest.Setup
             return new TestServer(BuildWebHost());
         }
 
+        public TestServer CreateServer(IWebHostBuilder buildWebHost)
+        {
+            return new TestServer(buildWebHost);
+        }
 
         public static class Post
         {

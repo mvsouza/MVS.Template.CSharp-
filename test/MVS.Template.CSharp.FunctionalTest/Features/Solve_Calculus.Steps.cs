@@ -8,7 +8,8 @@ using MVS.Template.CSharp.FunctionalTest.Setup;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Xunit;
-using static MVS.Template.CSharp.FunctionalTest.Setup.MathSolverScenarioBase;
+using static MVS.Template.CSharp.FunctionalTest.Setup.ScenarioBase;
+using Microsoft.AspNetCore.TestHost;
 
 namespace MVS.Template.CSharp.FunctionalTest.Features
 {
@@ -17,12 +18,17 @@ namespace MVS.Template.CSharp.FunctionalTest.Features
         private string _calculus;
         private IConfigurationRoot _configuration;
         private HttpResponseMessage _response;
+        private TestServer _service;
 
         public Solve_Calculus()
         {
+            var scenarioBase = new ScenarioBase();
+            var webHostBuilder = BuildWebHost();
+
+
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory());
-            _configuration = builder.Build();
+            _service = scenarioBase.CreateServer(webHostBuilder);
         }
 
         private void Given_the_calculus(string calculus)
@@ -36,8 +42,8 @@ namespace MVS.Template.CSharp.FunctionalTest.Features
 
             string json_requestEncouter = JsonConvert.SerializeObject($"\"{_calculus}\"");
             var content = new StringContent(json_requestEncouter, Encoding.UTF8, "application/json");
-            var scenarioBase = new MathSolverScenarioBase();
-            _response = await scenarioBase.CreateServer().CreateClient()
+            var scenarioBase = new ScenarioBase();
+            _response = await _service.CreateClient()
                 .PostAsync(Post.Solve(), content);
         }
 
