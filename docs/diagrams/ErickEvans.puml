@@ -1,0 +1,15 @@
+@startuml
+skinparam Handwritten true
+skinparam monochrome true	
+skinparam shadowing false
+node "<size:13>      Infrastructure    </size>" as Infrastructure
+node "<size:13>           UI           </size>" as UI
+node "<size:13>   Application  </size>" as Application
+node "<size:13>     Domain     </size>" as Domain
+Infrastructure <.up. UI
+Domain <.up. UI
+Infrastructure <.up. Domain
+Infrastructure <.up. Application
+UI .down.> Application
+Application .down.> Domain
+@enduml

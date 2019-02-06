@@ -1,12 +1,18 @@
-# Package design overview   
+# Package design overview
 
 Let's cover the package design decision made for this project and understand it's hidden technical background. 
 
 This project was made using Domain-driven design (DDD) layering pattern. It has been slightly changed compared to the version introduced by Vaughn Vernon on _Implementing Domain Driven Design_.  
 
+![Tradicional version](diagrams/ErickEvans.svg)
+
 He changed the main approach defined previously by Eric Evans. He achieved a better design with Dependence Inversion Principle (DIP) and a clear Single Responsibility Principle (SRP) definition.
 
+![Vaugh Vernon version](diagrams/VaughVernon.svg)
+
 Following his suggestion, the position of the infrastructure layer was inverted, putting it on top despite the standard model, that leave it in the bottom. So what was changed here from Vernon's model? 
+
+![Implemented version](diagrams/PackageDivision.svg)
 
 The UI and Infrastructure layers have been squashed into a single package, although their responsibilities are still separate.  The main reason is that *aspnet core*, a UI reference, is tightly coupled to programs `Startup`, an Infrastructure class. Anyway, the API logic is too thin to be on its own, so it's controllers are located on an API folder inside Infrastructure.
 
