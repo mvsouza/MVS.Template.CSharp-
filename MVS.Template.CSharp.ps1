@@ -55,7 +55,7 @@ process {
         script = {
             #Requires -Modules Set-PsEnv
             $projectName = "MVS.Template.CSharp";
-            SonarQube.Scanner.MSBuild.exe begin /k:"$env:sonarcloud_key" /d:sonar.organization="$env:sonarcloud_org" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="$env:sonarcloud_login" /d:sonar.cs.opencover.reportsPaths="OpenCover.xml";
+            SonarQube.Scanner.MSBuild.exe begin /k:"$env:sonarcloud_key" /d:sonar.organization="$env:sonarcloud_org" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="$env:sonarcloud_login" /d:sonar.cs.opencover.reportsPaths="OpenCover.xml"  /d:sonar.coverage.exclusions="**/Startup.cs,**/Program.cs";
             dotnet msbuild;
             RunOpenCover $projectName ".\" ".\OpenCover.xml";
             SonarQube.Scanner.MSBuild.exe end /d:sonar.login="$env:sonarcloud_login";
@@ -102,7 +102,7 @@ process {
             }
             $opencoverFile="$outputDir\OpenCover.xml";
             
-            SonarQube.Scanner.MSBuild.exe begin /k:"$projectName" /v:"1.0" /n:"$projectName" /d:sonar.cs.opencover.reportsPaths="$opencoverFile";
+            SonarQube.Scanner.MSBuild.exe begin /k:"$projectName" /v:"1.0" /n:"$projectName" /d:sonar.cs.opencover.reportsPaths="$opencoverFile" /d:sonar.coverage.exclusions="**/Startup.cs,**/Program.cs";
             dotnet restore $sln.FullName;
             dotnet msbuild $sln.FullName;
             RunOpenCover $projectName $outputDir $opencoverFile;

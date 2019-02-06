@@ -1,0 +1,3 @@
+ignore:
+  - "src/MVS.Template.CSharp.Infrastructure/Program.cs"
+  - "src/MVS.Template.CSharp.Infrastructure/Startup.cs"
