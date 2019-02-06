@@ -21,7 +21,11 @@ process {
     function RunOpenCover($projectName, $outputDir, $opencoverFile){
         $unitTestProj = Get-ChildItem "$PSScriptRoot\*$_*UnitTest.csproj" -Recurse;
         $dotnet = "C:\Program Files\dotnet\dotnet.exe";
-        $opencoverFilter = "+[$projectName*]* -[*UnitTest]*";
+        $filter = @("+[$projectName*]*","-[*UnitTest]*","-[$projectName.Infrastructure]*Program","-[$projectName.Infrastructure]*Startup",
+            "-[$projectName.Infrastructure]$projectName.Infrastructure.EF.Migrations.*",
+            "-[$projectName.Infrastructure]$projectName.Infrastructure.EF.EventStoreContext",
+            "-[$projectName.Infrastructure]$projectName.Infrastructure.EF.Mapping*");
+        $opencoverFilter = $filter -join " ";
         $target = "test --logger:trx;LogFileName=$outputDir\results.trx $($unitTestProj.FullName)";
         OpenCover.Console.exe -register:user -target:"$dotnet" -targetargs:"$target" -filter:"$opencoverFilter" -oldStyle -output:"$opencoverFile";
     }
@@ -50,9 +54,10 @@ process {
         description="Runs build and Sonnar Scanner on SonarCloud.";
         script = {
             #Requires -Modules Set-PsEnv
+            $projectName = "MVS.Template.CSharp";
             SonarQube.Scanner.MSBuild.exe begin /k:"$env:sonarcloud_key" /d:sonar.organization="$env:sonarcloud_org" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="$env:sonarcloud_login" /d:sonar.cs.opencover.reportsPaths="OpenCover.xml";
             dotnet msbuild;
-            OpenCover.Console.exe -register:user -target:"C:\Program Files\dotnet\dotnet.exe" -targetargs:"test --logger:trx;LogFileName=results.trx /p:DebugType=full test\MVS.Template.CSharp.UnitTest\MVS.Template.CSharp.UnitTest.csproj" -filter:"+[MVS.Template.CSharp*]* -[*.Test*]*" -oldStyle -output:"OpenCover.xml";
+            RunOpenCover $projectName ".\" ".\OpenCover.xml";
             SonarQube.Scanner.MSBuild.exe end /d:sonar.login="$env:sonarcloud_login";
             codecov -f .\OpenCover.xml -t $env:codecov_token;
         }
