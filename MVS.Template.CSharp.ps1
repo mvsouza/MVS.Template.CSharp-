@@ -55,7 +55,9 @@ process {
         script = {
             #Requires -Modules Set-PsEnv
             $projectName = "MVS.Template.CSharp";
-            $currentBranch = $(git rev-parse --abbrev-ref HEAD);
+            $currentBranch = $(if ($env:APPVEYOR_PULL_REQUEST_NUMBER) {$env:APPVEYOR_PULL_REQUEST_HEAD_REPO_BRANCH ;} else {$env:APPVEYOR_REPO_BRANCH;});
+            #$currentBranch = $(if ($currentBranch) {$currentBranch ;} else {$(git rev-parse --abbrev-ref HEAD);});
+            
             SonarQube.Scanner.MSBuild.exe begin /k:"$env:sonarcloud_key" /d:sonar.organization="$env:sonarcloud_org" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="$env:sonarcloud_login" /d:sonar.cs.opencover.reportsPaths="OpenCover.xml"  /d:sonar.coverage.exclusions="**/Startup.cs,**/Program.cs" /d:sonar.branch.name="$currentBranch";
             dotnet msbuild;
             RunOpenCover $projectName ".\" ".\OpenCover.xml";
