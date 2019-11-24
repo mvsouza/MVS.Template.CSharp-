@@ -5,7 +5,8 @@ param(
                  "sonarqubeLocalBuild", "statusSonarqube", "startSonarqubeContainer","stopSonarqubeContainer", "sonarCloudBuild",
                  "installDependencies", 
                  "plantumlSVG",
-                 "herokuPush","cfPush")]
+                 "herokuPush","cfPush",
+                 "help")]
     [string]$action,
     [parameter(Mandatory=$false)]
     [switch]$all
@@ -13,7 +14,6 @@ param(
 process {
     #Requires -Modules Set-PsEnv
     Set-PsEnv
-
     function SonarqubeStatus($add){
         $status = Invoke-RestMethod "$add/api/system/status";
         return $status.status -eq "UP";
@@ -31,6 +31,17 @@ process {
     }
 
     $tasks = @{};
+
+    $tasks.Add("help", @{
+        description="List all actions available.";
+        script = {
+            "$($MyInvocation.MyCommand.Name) ACTION"
+            "Actions parameter"
+            (Get-Variable "action").Attributes.ValidValues | %{
+                "`t$_`:`n`t`t$($tasks[$_].Description)"
+            };
+        };
+    });
 
     $tasks.Add("plantumlSVG", @{
         description="Convert all platuml files to SVG.";
