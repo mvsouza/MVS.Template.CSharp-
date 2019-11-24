@@ -1,15 +1,13 @@
 [CmdletBinding()]
 param(
-    [parameter(Mandatory=$true, Position=1)]
+    [parameter(Mandatory=$true, Position=0)]
     [ValidateSet("openCover", "lightBddResult",
                  "sonarqubeLocalBuild", "statusSonarqube", "startSonarqubeContainer","stopSonarqubeContainer", "sonarCloudBuild",
                  "installDependencies", 
                  "plantumlSVG",
                  "herokuPush","cfPush",
                  "help")]
-    [string]$action,
-    [parameter(Mandatory=$false)]
-    [switch]$all
+    [string]$action
 )
 process {
     #Requires -Modules Set-PsEnv
