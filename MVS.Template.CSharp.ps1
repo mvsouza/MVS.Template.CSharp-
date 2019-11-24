@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [parameter(Mandatory=$true, Position=1)]
-    [ValidateSet("openCover", 
+    [ValidateSet("openCover", "lightBddResult",
                  "sonarqubeLocalBuild", "statusSonarqube", "startSonarqubeContainer","stopSonarqubeContainer", "sonarCloudBuild",
                  "installDependencies", 
                  "plantumlSVG",
@@ -139,6 +139,15 @@ process {
             & "$outputDir\Index.htm";
         }
     });
+
+    $tasks.Add("lightBddResult",@{
+        description="Run all test and show the lightBDD results.";
+        script = {
+            dotnet test .\test\MVS.Template.CSharp.FunctionalTest\MVS.Template.CSharp.FunctionalTest.csproj;
+            ls .\*\FeaturesReport.html -Recurse | %{& $_.FullName};
+        }
+    });
+
     $tasks.Add("herokuPush",@{
         description="";
         script = {
