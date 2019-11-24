@@ -25,6 +25,21 @@ namespace MVS.Template.CSharp.UnitTest.Infrastructure.Behavior
             logger.VerifyLogHasMessage("Handled LogFakeCommand");
             Assert.Equal(expectedResult, result);
         }
+
+        [Fact]
+        public async System.Threading.Tasks.Task Should_log_before_and_after_CommandHandling_Async()
+        {
+            var logger = new Mock<ILogger<LoggingBehavior<LogFakeCommand, int>>>();
+            var expectedResult = 1;
+            var behavior = new LoggingBehavior<LogFakeCommand, int>(logger.Object);
+            var result = await behavior.Handle(new LogFakeCommand(), default(CancellationToken), async () => {
+                await Task.Delay(1);
+                return expectedResult;
+            });
+            logger.VerifyLogHasMessage("Handling LogFakeCommand");
+            logger.VerifyLogHasMessage("Handled LogFakeCommand");
+            Assert.Equal(expectedResult, result);
+        }
     }
 
     public static class ExtedLogger
