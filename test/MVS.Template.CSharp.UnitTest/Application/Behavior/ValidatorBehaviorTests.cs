@@ -24,6 +24,21 @@ namespace MVS.Template.CSharp.UnitTest.Application.Behavior
             _delegateHaveBeenCalled = false;
 
         }
+
+
+        [Fact]
+        public async Task Should_run_next_when_there_is_no_validatior_Async()
+        {
+            _validators = new IValidator<object>[0];
+            var behavior = new ValidatorBehavior<object, object>(_validators);
+            await behavior.Handle(new object(), default(CancellationToken), async () => {
+                await Task.Delay(1);
+                _delegateHaveBeenCalled = true;
+                return new Object();
+            });
+            Assert.True(_delegateHaveBeenCalled);
+        }
+
         [Fact]
         public async Task Should_run_next_when_there_is_no_validatior()
         {

@@ -13,17 +13,38 @@ namespace MVS.Template.CSharp.UnitTest.Infrastructure.Behavior
 {
     public class LoggingBehaviorTests
     {
+        private Mock<ILogger<LoggingBehavior<LogFakeCommand, int>>> _logger;
+        private LoggingBehavior<LogFakeCommand, int> _behavior;
+
         public class LogFakeCommand : IRequest<int> { }
-        [Fact]
-        public async System.Threading.Tasks.Task Should_log_before_and_after_CommandHandling()
+
+        public LoggingBehaviorTests()
         {
-            var logger = new Mock<ILogger<LoggingBehavior<LogFakeCommand, int>>>();
+            _logger = new Mock<ILogger<LoggingBehavior<LogFakeCommand, int>>>();
+            _behavior = new LoggingBehavior<LogFakeCommand, int>(_logger.Object);
+        }
+        public async Task Should_log_before_and_after_CommandHandling(Func<int, RequestHandlerDelegate<int>> solveResult)
+        {
+            
             var expectedResult = 1;
-            var behavior = new LoggingBehavior<LogFakeCommand, int>(logger.Object);
-            var result = await behavior.Handle(new LogFakeCommand(), default(CancellationToken), () => Task.FromResult(expectedResult));
-            logger.VerifyLogHasMessage("Handling LogFakeCommand");
-            logger.VerifyLogHasMessage("Handled LogFakeCommand");
+            var result = await _behavior.Handle(new LogFakeCommand(), default(CancellationToken), solveResult(expectedResult));
+            _logger.VerifyLogHasMessage("Handling LogFakeCommand");
+            _logger.VerifyLogHasMessage("Handled LogFakeCommand");
             Assert.Equal(expectedResult, result);
+        }
+        [Fact]
+        public async Task Should_log_before_and_after_CommandHandling_Sync()
+        {
+            await Should_log_before_and_after_CommandHandling((expectedResult) => () => Task.FromResult(expectedResult));
+        }
+        
+        [Fact]
+        public async Task Should_log_before_and_after_CommandHandling_Async()
+        {
+            await Should_log_before_and_after_CommandHandling((expectedResult) => async () => {
+                await Task.Delay(1);
+                return expectedResult;
+            });
         }
     }
 
