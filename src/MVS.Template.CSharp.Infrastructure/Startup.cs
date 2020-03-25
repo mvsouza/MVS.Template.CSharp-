@@ -4,9 +4,11 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.OpenApi.Models;
 using MVS.Template.CSharp.Application.Behavior;
 using MVS.Template.CSharp.Application.Command;
 using MVS.Template.CSharp.Application.Validation;
@@ -31,16 +33,16 @@ namespace MVS.Template.CSharp.Infrastructure
             services.AddSwaggerGen(options =>
             {
                 options.DescribeAllEnumsAsStrings();
-                options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
+                options.SwaggerDoc("v1", new OpenApiInfo()
                 {
                     Title = "MVS.Template.CSharp HTTP API",
                     Version = "v1",
-                    Description = "The Math Solver Service HTTP API",
-                    TermsOfService = "Terms Of Service"
+                    Description = "MVS.Template.CSharp HTTP API"
                 });
             });
-            services.AddMvc();
-            services.AddMediatR(Assembly.LoadFrom("MVS.Template.CSharp.Application.dll"));
+            services.AddControllers();
+            
+            services.AddMediatR(typeof(SolveCalculusCommandHandler));
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
@@ -55,8 +57,7 @@ namespace MVS.Template.CSharp.Infrastructure
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHealthChecks("/health");
-            app.UseMvc();
+            app.UseRouting();
             app.UseSwagger()
                .UseSwaggerUI(c =>
                {
@@ -64,6 +65,12 @@ namespace MVS.Template.CSharp.Infrastructure
                    c.RoutePrefix = string.Empty;
                }
             );
+            
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHealthChecks("health");
+                endpoints.MapControllers();
+            });
         }
     }
     

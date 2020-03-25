@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Internal;
 using Moq;
 using MVS.Template.CSharp.Infrastructure.Behaviors;
 using Xunit;
@@ -53,7 +51,9 @@ namespace MVS.Template.CSharp.UnitTest.Infrastructure.Behavior
 
         public static void VerifyLogHasMessage<TLogged>(this Mock<ILogger<TLogged>> logger, string message)
         {
-            logger.Verify(l => l.Log(LogLevel.Information, It.IsAny<EventId>(), It.Is<FormattedLogValues>(f => f.ToString().Contains(message)), null, It.IsAny<Func<Object, Exception, string>>()), Times.Once());
+            logger.Verify(l => l.Log(LogLevel.Information, It.IsAny<EventId>(), 
+                It.Is<It.IsAnyType>((object v, Type _) => v.ToString().Contains(message)), null,
+                (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()), Times.Once());
         }
     }
 }

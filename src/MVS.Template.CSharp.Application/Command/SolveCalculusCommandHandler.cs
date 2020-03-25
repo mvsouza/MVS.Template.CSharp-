@@ -9,9 +9,11 @@ namespace MVS.Template.CSharp.Application.Command
     {
         public async Task<double> Handle(SolveCalculusCommand command, CancellationToken cancellationToken)
         {
-            Factor f = new Factor(command.Calculus);
-
-            return f.Solve();
+            return await Task.Run(() =>
+            {
+                Factor f = new Factor(command.Calculus);
+                return f.Solve();
+            });
         }
     }
 }
