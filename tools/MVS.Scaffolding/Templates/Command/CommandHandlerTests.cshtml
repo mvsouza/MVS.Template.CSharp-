@@ -1,0 +1,24 @@
+﻿@inherits Microsoft.VisualStudio.Web.CodeGeneration.Templating.RazorTemplateBase
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using @(Model.Namespace).Application.Command;
+using Xunit;
+
+namespace @(Model.Namespace).UnitTest.Application.Command
+{
+    public class  @(Model.CommandClassName)CommandHandlerTests
+    {
+        [Fact]
+        public async void Should_return_ten()
+        {
+            var command = new  @(Model.CommandClassName)Command("Contoso");
+            var handler = new @(Model.CommandClassName)CommandHandler();
+
+            Assert.Equal(10.0, await handler.Handle(command, default(CancellationToken)));
+
+        }
+    }
+}
