@@ -1,13 +1,14 @@
-image: Visual Studio 2017
+image: Visual Studio 2019
 
 before_build:
-- nuget restore
 - choco install opencover.portable
 - choco install codecov
 - choco install msbuild-sonarqube-runner
 - ps: |
         Invoke-WebRequest https://raw.githubusercontent.com/rajivharris/Set-PsEnv/master/Set-PsEnv.psm1 -OutFile "..\Set-PsEnv.psm1"
         Import-Module '..\Set-PsEnv.psm1'
+        dotnet build tools/MVS.Scaffolding/MVS.Scaffolding.csproj 
+        dotnet pack tools/MVS.Scaffolding -o artifacts --version-suffix dev-1
 build:
   project: MVS.Template.CSharp.sln
   verbosity: minimal
