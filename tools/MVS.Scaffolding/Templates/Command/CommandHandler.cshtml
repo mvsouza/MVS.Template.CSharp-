@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace @(Model.Namespace).Application.Command
 {
-    public class @(Model.CommandClassName)CommandHandler : IRequestHandler<@(Model.CommandClassName)Command, double>
+    public class @(Model.ClassName)CommandHandler : IRequestHandler<@(Model.ClassName)Command, double>
     {
-        public async Task<double> Handle(@(Model.CommandClassName)Command command, CancellationToken cancellationToken)
+        public async Task<double> Handle(@(Model.ClassName)Command command, CancellationToken cancellationToken)
         {
             return await Task.FromResult(10.0);;
         }

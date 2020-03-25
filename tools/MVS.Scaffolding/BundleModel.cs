@@ -1,8 +1,8 @@
 namespace MVS.Scaffolding
 {
-    public class CommandModel
+    public class BundleModel
     {
         public string Namespace { get;set; }
-        public string CommandClassName { get;set; }
+        public string ClassName { get;set; }
     }
 }
