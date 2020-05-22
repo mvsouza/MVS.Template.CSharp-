@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Web.CodeGeneration;
 using Microsoft.VisualStudio.Web.CodeGeneration.CommandLine;
 using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.ProjectModel;
 using Microsoft.VisualStudio.Web.CodeGeneration.DotNet;
+using MVS.Scaffolding.Models;
 
 namespace MVS.Scaffolding
 {
@@ -27,7 +28,7 @@ namespace MVS.Scaffolding
             yield return new FileBoilerPlaitModel(UnitTestPath, "Api", bundleName, "ControllerTests", GeneratedFileExtension);
         }
 
-        public async Task GenerateCode(BundleCommandLineModel model)
+        public async Task GenerateCode(BaseModel model)
         {
             await base.GenerateCode(model);
         }

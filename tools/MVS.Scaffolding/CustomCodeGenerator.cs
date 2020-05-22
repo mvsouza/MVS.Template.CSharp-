@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.Web.CodeGeneration;
 using Microsoft.VisualStudio.Web.CodeGeneration.Contracts.ProjectModel;
 using Microsoft.VisualStudio.Web.CodeGeneration.DotNet;
+using MVS.Scaffolding.Models;
 
 namespace MVS.Scaffolding
 {
@@ -32,27 +33,23 @@ namespace MVS.Scaffolding
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task GenerateCode(BundleCommandLineModel model)
+        public async Task GenerateCode(BaseModel model)
         {
             if (model == null)
                 throw new ArgumentNullException(nameof(model));
 
-            if (string.IsNullOrEmpty(model.BundleName))
+            if (string.IsNullOrEmpty(model.ClassName))
                 throw new ArgumentException("Please specify the name of the command using --bundleName");
             
-            var files = GetFiles(model.BundleName);
+            var files = GetFiles(model.ClassName);
             foreach (var code in files)
                 if (File.Exists(code.DestinationPath) && !model.Force)
                     throw new InvalidOperationException($"File already exists '{code.DestinationPath}' use -f to force over write.");
             
-            var BundleModel = new BundleModel()
-            {
-                ClassName = model.BundleName,
-                Namespace = _applicationInfo.ApplicationName.ReplaceLast(".Infrastructure", "")
-            };
+            model.Namespace = _applicationInfo.ApplicationName.ReplaceLast(".Infrastructure", "");
             foreach (var code in files)
             {
-                await _codeGeneratorActionsService.AddFileFromTemplateAsync(code.DestinationPath, code.File, TemplateFolders, BundleModel);
+                await _codeGeneratorActionsService.AddFileFromTemplateAsync(code.DestinationPath, code.File, TemplateFolders, model);
                 _logger.LogMessage($"Added: {code.DestinationPath.Substring(code.DestinationPath.LastIndexOf('/'))}");
             }
         }

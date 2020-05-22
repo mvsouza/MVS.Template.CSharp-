@@ -8,5 +8,14 @@
 
   <ItemGroup>
     <None Include="Templates\" Pack="true" PackagePath="Templates\" />
+    <None Remove="Templates\Generetors\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Templates\Generetors\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Templates\Generetors\**" />
   </ItemGroup>
 </Project>

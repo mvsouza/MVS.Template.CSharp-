@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace @(Model.Namespace).Application.Command
 {
-    public class @(Model.ClassName)Command : IRequest<double>
+    public class @(Model.ClassName)Command : IRequest<@(Model.ReturnType)>
     {
         public string Name { get; set; }
         public @(Model.ClassName)Command(string name)
