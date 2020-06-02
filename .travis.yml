@@ -7,6 +7,7 @@ services:
 script:
   - dotnet build tools/MVS.Scaffolding/MVS.Scaffolding.csproj
   - dotnet pack tools/MVS.Scaffolding -o artifacts --version-suffix dev-1
+  - dotnet restore
   - dotnet test ./test/MVS.Template.CSharp.UnitTest/MVS.Template.CSharp.UnitTest.csproj
 after_success:
   - test "$TRAVIS_BRANCH" = "master" && sh scripts/deploy_heroku.sh
