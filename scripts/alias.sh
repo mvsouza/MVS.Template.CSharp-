@@ -6,3 +6,10 @@ alias dnbc='dotnet build --no-incremental --force'
 alias dnc='dotnet aspnet-codegenerator -p .'
 alias cc='rm -r ~/.nuget/packages/mvs.scaffolding; rm -r ../../artifacts'
 alias bp='dnbc ../../tools/MVS.Scaffolding/MVS.Scaffolding.csproj && dotnet pack ../../tools/MVS.Scaffolding -o ../../artifacts --version-suffix dev-1 && dotnet restore'
+_dotnet_zsh_complete()
+{
+  local completions=("$(dotnet complete "$words")")
+
+  reply=( "${(ps:\n:)completions}" )
+}
+compctl -K _dotnet_zsh_complete dotnet
