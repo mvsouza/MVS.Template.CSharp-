@@ -4,12 +4,14 @@ nuget Fake.IO.FileSystem
 nuget Fake.Core.Target 
 nuget FSharp.Data 
 nuget Fake.DotNet.Testing.Coverlet
-nuget Fake.Testing.ReportGenerator //"
+nuget Fake.Testing.ReportGenerator 
+nuget Fake.Runtime //"
 
 #load ".fake/build.fsx/intellisense.fsx"
 
 open Fake.Core
 open Fake.DotNet
+open Fake.DotNet.NuGet
 open Fake.DotNet.Testing
 open Fake.IO
 open Fake.IO.FileSystemOperators
@@ -19,24 +21,27 @@ open Fake.Testing
 open FSharp.Data
 open System
 
+let artifacts = __SOURCE_DIRECTORY__ + "/artifacts"
+
 
 let coverageSource = fun (p: Coverlet.CoverletParams) ->
     { p with
         OutputFormat = Coverlet.OutputFormat.OpenCover
-        Output = "coverage.xml"
         Include = [
             "MVS.Template.CSharp.*", "*"
         ] 
         Exclude = [
-            "*d   Tests?", "*"
+            "*Tests?", "*"
             "*", "System.*"
+            "MVS.Template.CSharp.Infrastructure", "*Program"
+            "MVS.Template.CSharp.Infrastructure", "*Startup"
         ]
     }
 
 let coverageOutput = fun (config: Coverlet.CoverletParams) ->
     { config with
         OutputFormat = Coverlet.OutputFormat.OpenCover
-        Output = "coverage.xml"
+        Output = __SOURCE_DIRECTORY__ + "/coverage.xml"
     } |> coverageSource
 
 let coverageThreshold = fun (config: Coverlet.CoverletParams) ->
@@ -66,11 +71,6 @@ Target.create "BDD" (fun _ ->
     |> Seq.iter (DotNet.test id)
 )
 
-Target.create "Libtest" (fun _ ->
-    !! "test/**/*.*Test.fsproj"
-    |> Seq.iter (DotNet.test id)
-)
-
 Target.create "Reports" (fun _ ->
     let local =  Path.getFullName "./"
     let path = sprintf "%sreports/" local
@@ -90,22 +90,29 @@ Target.create "Build" (fun _ ->
     |> Seq.iter (DotNet.build id)
 )
 
+Target.create "Restore" (fun _ ->
+    !! "src/**/*.*proj"
+    |> Seq.iter (DotNet.restore id)
+)
+
 Target.create "All" ignore
 
 Target.create "Cover" ignore
 
 Target.create "Pipeline" ignore
 
-"TestThreshold"
-  ==> "Libtest"
+"Restore"
+  ==> "TestThreshold"
   ==> "BDD"
   ==> "Pipeline"
-
-"Stats"
+  
+"Restore"
+  ==> "Stats"
   ==> "Reports"
   ==> "Cover"
 
 "Clean"
+  ==> "Restore"
   ==> "Build"
   ==> "All"
 
