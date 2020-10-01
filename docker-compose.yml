@@ -2,8 +2,8 @@ version: '3.3'
 
 services: 
     
-  MVS.Template.CSharp.API:
-    image: ${docker_image_name}:${TAG:-latest}
+  mvs-template-csharp-api:
+    image: ${docker_image_name:-mvs-template-csharp-api}:${TAG:-latest}
     build:
       context: .
       dockerfile: src/MVS.Template.CSharp.Infrastructure/Dockerfile
