@@ -1,18 +1,16 @@
-﻿using System;
-using System.Reflection;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using MVS.Template.CSharp.Application.Behavior;
 using MVS.Template.CSharp.Application.Command;
 using MVS.Template.CSharp.Application.Validation;
 using MVS.Template.CSharp.Infrastructure.Behaviors;
+using Serilog;
+using Serilog.Formatting.Compact;
 
 namespace MVS.Template.CSharp.Infrastructure
 {
@@ -21,6 +19,11 @@ namespace MVS.Template.CSharp.Infrastructure
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .WriteTo.Console(new CompactJsonFormatter())
+                .CreateLogger();
         }
 
         public IConfiguration Configuration { get; }
@@ -32,7 +35,6 @@ namespace MVS.Template.CSharp.Infrastructure
             services.AddOptions();
             services.AddSwaggerGen(options =>
             {
-                options.DescribeAllEnumsAsStrings();
                 options.SwaggerDoc("v1", new OpenApiInfo()
                 {
                     Title = "MVS.Template.CSharp HTTP API",
@@ -47,10 +49,13 @@ namespace MVS.Template.CSharp.Infrastructure
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidatorBehavior<,>));
             services.AddTransient(typeof(IValidator<SolveCalculusCommand>), typeof(SolveCalculusCommandValidation));
+
+            services.AddLogging(loggingBuilder =>
+                loggingBuilder.AddSerilog(dispose: true));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
             if (env.IsDevelopment())
             {

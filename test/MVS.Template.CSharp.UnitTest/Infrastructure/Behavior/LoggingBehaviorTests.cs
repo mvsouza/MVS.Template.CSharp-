@@ -21,7 +21,7 @@ namespace MVS.Template.CSharp.UnitTest.Infrastructure.Behavior
             _logger = new Mock<ILogger<LoggingBehavior<LogFakeCommand, int>>>();
             _behavior = new LoggingBehavior<LogFakeCommand, int>(_logger.Object);
         }
-        public async Task Should_log_before_and_after_CommandHandling(Func<int, RequestHandlerDelegate<int>> solveResult)
+        private async Task Should_log_before_and_after_CommandHandling(Func<int, RequestHandlerDelegate<int>> solveResult)
         {
             
             var expectedResult = 1;

@@ -26,7 +26,7 @@ namespace MVS.Template.CSharp.UnitTest.API
                 return solvedValue;
             }));
         }
-        public async Task Should_send_SolveCommand(Func<double,Func<Task<double>>> solveResult)
+        private async Task Should_send_SolveCommand(Func<double,Func<Task<double>>> solveResult)
         {
             var solvedValue = 10.0;
             var mediatr = new Mock<IMediator>();
